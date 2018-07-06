@@ -1,0 +1,21 @@
+version: '3.6'
+services:
+  redis:
+    image: redis
+    expose:
+      - "6379"
+
+  celery-worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-celery
+    depends_on:
+      - redis
+
+  celery-beat:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-celery
+    depends_on:
+      - redis
+    command: celery beat -A celery_schedule

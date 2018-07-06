@@ -1,0 +1,10 @@
+FROM python:3.6.5
+
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+
+# Create unprivileged user
+RUN adduser --disabled-password --gecos 'Celery' cel
+
+COPY . .
+CMD celery worker -A celery_schedule -l info -c 5 -Ofair --uid=cel
